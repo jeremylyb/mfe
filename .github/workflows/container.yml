@@ -1,34 +1,3 @@
-# name: deploy-container
-
-# on:
-#   push:
-#     branches:
-#       - main
-#     paths:
-#       - "packages/container/**"
-
-
-# defaults:
-#   run:
-#     working-directory: packages/container
-
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - uses: actions/checkout@v2
-#       - run: npm install
-#       - run: npm run build
-
-#       - uses: shinyinc/action-aws-cli@v1.2
-#       # Sync the content of distribution directory 'dist' with an S3 bucket or a place where we can store files on AWS
-#       # ${name of S3 bucket we syncing to}
-#       - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
-#         env:
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           AWS_DEFAULT_REGION: ""
 name: deploy-container
 
 on:
@@ -37,6 +6,7 @@ on:
       - main
     # paths:
     #   - "packages/container/**"
+
 
 defaults:
   run:
@@ -47,33 +17,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
       - run: npm install
       - run: npm run build
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: shinyinc/action-aws-cli@v1.2
+      # Sync the content of distribution directory 'dist' with an S3 bucket or a place where we can store files on AWS
+      # ${name of S3 bucket we syncing to}
       - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ""
-
-    # steps:
-    #   - name: Checkout code
-    #     uses: actions/checkout@v4
-
-    #   - name: Install dependencies
-    #     run: npm install
-
-    #   - name: Build project
-    #     run: npm run build
-
-    #   - name: Configure AWS Credentials
-    #     uses: aws-actions/configure-aws-credentials@v4
-    #     with:
-    #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #       aws-region: us-east-1 # Change to your actual region
-
-    #   - name: Deploy to S3
-    #     run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
