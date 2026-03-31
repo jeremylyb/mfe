@@ -35,8 +35,8 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "packages/container/**"
+    # paths:
+    #   - "packages/container/**"
 
 defaults:
   run:
