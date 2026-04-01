@@ -8,9 +8,22 @@ const domain = process.env.PRODUCTION_DOMAIN;
 
 const prodConfig = {
     mode: 'production',
+    /*
+        - Output attribute -> changes how some of the different files get referred to or named after they are processed by Webpack
+        - filename attribute ->  change how all of our different files get named
+        - publicPath -> Used anytime you have some part of webpack that tries to refer to a file that has been built by webpack
+                        example: whenever our HTML plugin tries to refer to some javascript file that has been created
+                                Currently, whenever the HTML plugin tries to refer to some file that's been built by webpack, it just makes use directly
+                                by the file name. But we can get the HTML plugin to try to add in some path on there as well by setting this publicPath
+                                attribute
+                                Like appending a specific path before the filename
+                        results with publicPath: '/container/latest/main.XXXXX.....js'
+                     -> this would go into our S3 bucket
+    */
     output: {
         // to include the name of file that was created and the hash of the contents of the file -> for caching issues
-        filename: '[name].[contenthash].js'
+        filename: '[name].[contenthash].js',
+        publicPath: '/container/latest',
     },
     plugins: [
         new ModuleFederationPlugin({
